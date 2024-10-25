@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация и Вход</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .btn btn-secondary {
+            display: none;
+            color: aliceblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <button class="btn btn-secondary" id="showRegister"><a href="register.html">Регистрация</a></button>
+            <button class="btn btn-secondary" id="showLogin"><a href="register.html">Вход</a></button>
+        </div>
+        <script>
+            document.getElementById('showRegister').addEventListener('click', function() {
+                document.getElementById('registerForm').classList.add('active');
+                document.getElementById('loginForm').classList.remove('active');
+            });
+
+            document.getElementById('showLogin').addEventListener('click', function() {
+                document.getElementById('loginForm').classList.add('active');
+                document.getElementById('registerForm').classList.remove('active');
+            });
+        </script>
+</body>
+
+</html>
