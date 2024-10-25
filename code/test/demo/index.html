@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TEST</title>
+    <!-- The jQuery library is a prerequisite for all jqSuite products -->
+    <script type='text/javascript' src='JS/jquery-3.6.0.min.js'></script>
+    <script type='text/javascript' src='JS/jQ_UI/jquery-ui.js'></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='JS/jQ_UI/jquery-ui.css' />
+    <link rel='stylesheet' type='text/css' media='screen' href='JS/jQ_UI/jquery-ui.structure.css' />
+    <link rel='stylesheet' type='text/css' media='screen' href='JS/jQ_UI/jquery-ui.theme.css' />
+</head>
+
+<body>
+    <script>
+        $(document).ready(function() {
+            function load_items(items) {
+                var show = '?show';
+                if (items !== undefined) show = '';
+                console.log(items);
+                $.ajax({
+                    async: true,
+                    type: "post",
+                    url: "add.php" + show,
+                    datatype: "json",
+                    data: items,
+                    success: function(data) {
+                        var jData = JSON.parse(data);
+                        let sel = '';
+                        console.log(jData);
+                        sel = '<table ><tbody class="ui-widget-content">'
+                        sel += '<thead class="ui-widget-header"><tr><th> Артикул</th><th>Наименование</th><th>Цена</th><th></th></tr></thead>';
+                        $.each(jData, function() {
+                            //  console.log(this);
+                            sel += '<tr><td>' + this.id + '</td><td>' + this.name + '</td><td>' + this.cost + "</td><td><img width='60'src='" + this.path + " '></td><td><button>Купить</button></td></tr>";
+                        });
+                        sel += '</tbody></table>'
+                            //console.log(sel);
+                        catalog.html(sel);
+                    }
+                });
+            }
+
+            var catalog = $('#catalog')
+            load_items()
+            catalog.find("th").addClass("ui-state-default");
+            catalog.find("td").addClass("ui-widget-content");
+
+            var form_r = $('#r_form').dialog({
+                autoOpen: false,
+                height: 500,
+                width: 500,
+                modal: true,
+                buttons: {
+                    "Регистрироватся": function() {
+                        form_r.dialog("close");
+                    }
+                }
+            });
+
+            var form_a = $('#a_form').dialog({
+                autoOpen: false,
+                height: 500,
+                width: 500,
+                modal: true,
+                buttons: {
+                    "Войти": function() {
+                        form_a.dialog("close");
+                    }
+                }
+            });
+
+            var form_add = $('#add_form').dialog({
+                autoOpen: false,
+                height: 300,
+                width: 400,
+                modal: true,
+                buttons: {
+                    "Сохранить": function() {
+                        let form = $("#f_add_t");
+                        console.log(form.serializeArray());
+                        load_items(form.serializeArray());
+                        form[0].reset();
+                        form_add.dialog("close");
+                    }
+                }
+            });
+            $("#t_cost").bind('keypress', (function(e) {
+                var keyCode = e.keyCode || e.which;
+                var regex = /^[0-9]+$/;
+                var isValid = regex.test(String.fromCharCode(keyCode));
+                return isValid;
+            }));
+
+            $('#open_f_a').on('click', function() {
+                form_a.dialog("close");
+                form_a.dialog("open");
+            });
+            $('#open_f_r').on('click', function() {
+                form_r.dialog("close");
+                form_r.dialog("open");
+            });
+            $('#open_f_add').on('click', function() {
+                form_add.dialog("close");
+                form_add.dialog("open");
+            });
+        });
+    </script>
+    <a class="ui-button" href="#" id="open_f_a"> <span class='ui-icon ui-icon-alert' style='float:left; margin:12px 12px 20px 0;'></span>Вход</a>
+    <a class="ui-button" href="#" id="open_f_r"><span class='ui-icon ui-icon-alert'
+                                                  style='float:left; margin:12px 12px 20px 0;'></span>Регистрация</a>
+    <a class="ui-button" href="#" id="open_f_add"><span class='ui-icon ui-icon-alert'
+                                                    style='float:left; margin:12px 12px 20px 0;'></span>Добавить
+    товар</a>
+    <!--<a class="ui-button" href="#" id="load"><span class='ui-icon ui-icon-alert' style='float:left; margin:12px 12px 20px 0;'></span>Загрузить</a> -->
+    <div id="catalog"></div>
+    <div id="a_form" title="Вход">
+        <table>
+            <tr>
+                <td><label for="a_name">Логин </label></td>
+                <td><input type='text' id='a_name' value=''></td>
+            </tr>
+            <tr>
+                <td><label for="a_pass">Пароль </label></td>
+                <td><input type='password' id='a_pass' value=''></td>
+            </tr>
+        </table>
+        <div id="a_capcha"></div>
+
+    </div>
+    <div id="r_form" title="Регистрация">
+        <table>
+            <tr>
+                <td><label for="r_name">Логин </label></td>
+                <td><input type='text' id='r_name' value=''>
+            </tr>
+            <tr>
+                <td><label for="r1_pass">Пароль </label></td>
+                <td><input type='password' id='r1_pass' value=''>
+            </tr>
+            <tr>
+                <td><label for="r2_pass">Пароль2 </label></td>
+                <td><input type='password' id='r2_pass' value=''>
+            </tr>
+            <tr>
+                <td><label for="r_email">Почта </label></td>
+                <td><input type='email' id='r_email' value=''>
+            </tr>
+        </table>
+        <div id="r_capcha"></div>
+    </div>
+    <div id="add_form" title="Регистрация">
+        <form id="f_add_t">
+            <table>
+                <tr>
+                    <td><label for="t_name">Название</label></td>
+                    <td><input type='text' id='t_name' name="t_name" value=''>
+                </tr>
+                <tr>
+                    <td><label for="t_cost">Цена </label></td>
+                    <td><input type='text' id='t_cost' name='t_cost' value=''>
+                </tr>
+                <tr>
+                    <td><label for="t_url">Ссылка на картинку </label></td>
+                    <td><input type='text' id='t_url' name='t_url' value=''>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
+
+</html>
