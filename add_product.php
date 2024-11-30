@@ -21,13 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: /golovkina.e.p/my_project/html/add_product.html
         
         ");
-        
-      
-      
-      
-      
-      
-      
       exit();
  
       } else {
