@@ -1,57 +1,50 @@
-<?php 
-// Включаем отображение ошибок для отладки
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+<?php
+require('database.php');
 
-// Подключаем файл с соединением к базе данных
-require('database.php'); // Убедитесь, что путь к файлу правильный
-
-// Проверяем, авторизован ли пользователь (предполагается, что у вас есть система аутентификации)
 session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Перенаправляем на страницу входа, если пользователь не авторизован
+if (!isset($_SESSION['client_id'])) {
+    header("Location: profile.php");
     exit();
 }
 
-// Получаем текущие данные пользователя из базы данных
-$user_id = $_SESSION['user_id'];
-$sql = "SELECT `full_name`, `address`, `phone`, `password` FROM `users` WHERE `id` = '$user_id'";
-$result = mysqli_query($conn, $sql);
+$clientId = $_SESSION['client_id'];
+$sql = "SELECT id, fio, email, phone, password, delivery_address FROM clients WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $clientId);
+$stmt->execute();
+$result = $stmt->get_result();
+$client = $result->fetch_assoc();
 
-if ($result && mysqli_num_rows($result) > 0) {
-    $user = mysqli_fetch_assoc($result);
-} else {
-    die("Ошибка получения данных пользователя: " . mysqli_error($conn));
-}
-
-// Обработка формы при отправке
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $full_name = mysqli_real_escape_string($conn, $_POST['full_name']);
-    $address = mysqli_real_escape_string($conn, $_POST['address']);
-    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+   
+    $fio = $_POST['fio'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $delivery_address = $_POST['delivery_address'];
     $password = $_POST['password'];
 
-    // Проверка и обновление пароля
     if (!empty($password)) {
-        // Хешируем новый пароль
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $update_sql = "UPDATE `users` SET `full_name`='$full_name', `address`='$address', `phone`='$phone', `password`='$hashed_password' WHERE `id`='$user_id'";
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $updateSql = "UPDATE clients SET fio=?, email=?, phone=?, delivery_address=?, password=? WHERE id=?";
+        $stmt = $conn->prepare($updateSql);
+        $stmt->bind_param("sssssi", $fio, $email, $phone, $delivery_address, $hashedPassword, $clientId);
     } else {
-        // Если пароль не изменяется
-        $update_sql = "UPDATE `users` SET `full_name`='$full_name', `address`='$address', `phone`='$phone' WHERE `id`='$user_id'";
+        $updateSql = "UPDATE clients SET fio=?, email=?, phone=?, delivery_address=? WHERE id=?";
+        $stmt = $conn->prepare($updateSql);
+        $stmt->bind_param("ssssi", $fio, $email, $phone, $delivery_address, $clientId);
     }
 
-    if (mysqli_query($conn, $update_sql)) {
-        echo "<p>Данные успешно обновлены!</p>";
-        // Обновляем данные в сессии (если нужно)
-        $_SESSION['full_name'] = $full_name;
+    if ($stmt->execute()) {
+        echo "<script>alert('Данные успешно обновлены!');</script>";
+
+        $_SESSION['client_fio'] = $fio;
     } else {
-        echo "Ошибка обновления данных: " . mysqli_error($conn);
+        echo "<script>alert('Ошибка при обновлении данных: " . mysqli_error($conn) . "');</script>";
     }
 }
 
-// Закрываем соединение с базой данных
-mysqli_close($conn);
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -59,28 +52,62 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Изменение профиля</title>
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Изменение профиля</h1>
-    <form method="post" action="">
-        <label for="full_name">ФИО:</label>
-        <input type="text" id="full_name" name="full_name" value="<?php echo htmlspecialchars($user['full_name']); ?>" required><br>
+    <header>
+        <h1>Личный кабинет</h1>
+        <nav>
+            <ul>
+                <li><a href="my_project/register.html">Личный кабинет</a></li>
+                <li><a href="#orders">Мои заказы</a></li>
+                <li><a href="#about">О Нас</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <label for="address">Адрес:</label>
-        <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($user['address']); ?>" required><br>
+    <section class="banner">
+        <h2>Добро пожаловать в ваш личный кабинет!</h2>
+        <p>Здесь вы можете изменить свои данные профиля.</p>
+    </section>
 
-        <label for="phone">Телефон:</label>
-        <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" required><br>
+    <section id="profile">
+        <h2>Изменение профиля</h2>
+        <form method="post" action="">
+            <div class="form-group mb-3">
+                <label for="fio">ФИО</label>
+                <input type="text" class="form-control" id="fio" name="fio" value="<?php echo htmlspecialchars($client['fio']); ?>" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($client['email']); ?>" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="phone">Телефон</label>
+                <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($client['phone']); ?>" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="delivery_address">Адрес доставки</label>
+                <input type="text" class="form-control" id="delivery_address" name="delivery_address" value="<?php echo htmlspecialchars($client['delivery_address']); ?>" required>
+                </div>
+            <div class="form-group mb-3">
+                <label for="password">Пароль (оставьте пустым для сохранения текущего)</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
 
-        <label for="password">Новый пароль (оставьте пустым, если не хотите менять):</label>
-        <input type="password" id="password" name="password"><br>
-
-        <button type="submit">Сохранить изменения</button>
-    </form>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </form>
+    </section>
 
     <footer>
         <p>&copy; 2024 Магазин мебели. Все права защищены.</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+
 </body>
 </html>
