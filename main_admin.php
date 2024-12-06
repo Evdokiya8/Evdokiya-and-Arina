@@ -56,14 +56,12 @@
             <tbody id="orders-table-body">
                 <?php
                 require('database.php');
-
                 $SQL = "SELECT id, order_date, order_status, id_clients FROM orders";
                 $result = mysqli_query($conn, $SQL);
                 
                 if (!$result) {
                     die("Couldn't execute query: " . mysqli_error($conn));
                 }
-
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                         echo "<tr data-id='{$row['id']}' data-status='{$row['order_status']}'>
@@ -86,7 +84,6 @@
             </tbody>
         </table>
     </section>
-
     <section id="products">
         <h2>Продукты</h2>
     </section>
@@ -94,7 +91,6 @@
     <footer>
         <p>&copy; 2024 Магазин мебели. Все права защищены.</p>
     </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
     <script>
