@@ -8,11 +8,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = $_POST['phone'];
     $role = $_POST['role'];
 
+    // Подготовленный запрос для предотвращения SQL-инъекций
     $stmt = $conn->prepare("INSERT INTO users (username, password, email, phone, role) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $username, $password, $email, $phone, $role);
 
     if ($stmt->execute()) {
-         header("Location: /golovkina.e.p/my_project/php/main.php"); 
+        // Перенаправление в зависимости от роли
+        if ($role === 'admin') {
+            header("Location: /golovkina.e.p/my_project/php/main_admin.php");
+        } else {
+            header("Location: /golovkina.e.p/my_project/php/main.php");
+        }
         exit(); 
     } else {
         echo "Ошибка: " . $stmt->error;
