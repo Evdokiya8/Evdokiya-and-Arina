@@ -12,7 +12,9 @@
         <h1>Магазин мебели</h1>
         <nav>
             <ul>
-                <li><a href="/my_project/php/profile.php">Личный кабинет</a></li>
+                <li><a href="profile.php">Личный кабинет</a></li>
+                <li><a href="add_product.php">Создать заявку</a></li>
+                <li><a href="view_orders.php">Мои заявки</a></li>
                 <li><a href="#products">Продукты</a></li>
                 <li><a href="#about">О Нас</a></li>
                 <li><a href="#contact">Контакты</a></li>
