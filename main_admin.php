@@ -74,7 +74,21 @@
                                 <td>
                                     <!-- Форма для изменения статуса -->
                                     <form method='post' action='update_order_status.php' style='display:inline;'>
-                                        <input type='hidden' name='order_id' value='{$row['id']}'>
+                                        <input type='hidden' name='order_id' value='{$row['id']}'><select name='new_status' onchange='this.form.submit()'>
+                                            <option value=''>Изменить статус</option>
+                                            <option value='pending'>В ожидании</option>
+                                            <option value='completed'>Завершено</option>
+                                            <option value='canceled'>Отменено</option>
+                                        </select>
+                                    </form>
+
+                                    <!-- Форма для удаления заявки -->
+                                    <form method='post' action='delete_order.php' style='display:inline;'>
+                                        <input type='hidden' name='delete_order_id' value='{$row['id']}'>
+                                        <button type='submit' class='btn btn-danger btn-sm'>Удалить</button>
+                                    </form>
+                                </td>
+                              </tr>";
                     }
                 } else {
                     echo "<tr><td colspan='5'>Заявки не найдены.</td></tr>";
@@ -85,15 +99,22 @@
             </tbody>
         </table>
     </section>
+
+    <!-- Раздел для продуктов -->
     <section id="products">
         <h2>Продукты</h2>
     </section>
 
+    <!-- Подвал -->
     <footer>
         <p>&copy; 2024 Магазин мебели. Все права защищены.</p>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> 
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <!-- Скрипт фильтрации -->
     <script>
         document.getElementById('search').addEventListener('input', function() {
             const filter = this.value.toLowerCase();
@@ -123,4 +144,4 @@
     </script>
 
 </body>
-</html
+</html>
