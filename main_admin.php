@@ -12,10 +12,10 @@
         <h1>Администратор - Магазин мебели</h1>
         <nav>
             <ul>
-                <li><a href="my_project/register.html">Личный кабинет</a></li>
+                <li><a href="admin.php">Личный кабинет</a></li>
                 <li><a href="#orders">Заявки</a></li>
                 <li><a href="#products">Продукты</a></li>
-                <li><a href="#about">О Нас</a></li>
+                <li><a href="add_product.php">Добавить товар</a></li>
                 <li><a href="#contact">Контакты</a></li>
             </ul>
         </nav>
@@ -56,12 +56,14 @@
             <tbody id="orders-table-body">
                 <?php
                 require('database.php');
+
                 $SQL = "SELECT id, order_date, order_status, id_clients FROM orders";
                 $result = mysqli_query($conn, $SQL);
                 
                 if (!$result) {
                     die("Couldn't execute query: " . mysqli_error($conn));
                 }
+
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                         echo "<tr data-id='{$row['id']}' data-status='{$row['order_status']}'>
@@ -70,10 +72,9 @@
                                 <td>{$row['order_status']}</td>
                                 <td>{$row['id_clients']}</td>
                                 <td>
-                                    <button class='btn btn-warning btn-sm edit-btn'>Изменить статус</button>
-                                    <button class='btn btn-danger btn-sm delete-btn'>Удалить</button>
-                                </td>
-                              </tr>";
+                                    <!-- Форма для изменения статуса -->
+                                    <form method='post' action='update_order_status.php' style='display:inline;'>
+                                        <input type='hidden' name='order_id' value='{$row['id']}'>
                     }
                 } else {
                     echo "<tr><td colspan='5'>Заявки не найдены.</td></tr>";
