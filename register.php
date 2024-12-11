@@ -63,6 +63,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
     </form>
+
+    <!-- Ссылка на страницу входа -->
+    <p class="mt-3">Уже есть аккаунт? <a href="/my_project/php/login.php">Войти</a></p>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
