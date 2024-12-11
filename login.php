@@ -70,7 +70,7 @@ $conn->close();
     </form>
 
     <!-- Ссылка на страницу регистрации -->
-    <p class="mt-3">Еще нет аккаунта? <a href="/my_project/php/register.php">Зарегистрироваться</a></p>
+    <p class="mt-3">Еще нет аккаунта? <a href="register.php">Зарегистрироваться</a></p>
 
 </div>
 
