@@ -13,10 +13,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
+        // Проверка пароля
         if (password_verify($password, $user['password'])) {
+            // Успешный вход
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
+
             if ($user['role'] === 'admin') {
                 header("Location: /golovkina.e.p/my_project/php/main_admin.php"); 
             } else {
@@ -65,6 +68,10 @@ $conn->close();
         </div>
         <button type="submit" class="btn btn-primary">Войти</button>
     </form>
+
+    <!-- Ссылка на страницу регистрации -->
+    <p class="mt-3">Еще нет аккаунта? <a href="/my_project/php/register.php">Зарегистрироваться</a></p>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
