@@ -2,15 +2,13 @@
 require 'database.php';
 session_start();
 
-// Проверка на авторизацию пользователя
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Перенаправление на страницу входа, если не авторизован
+    header("Location: login.php");
     exit();
 }
 
-// Получение заказов текущего пользователя из базы данных
 $userId = $_SESSION['user_id'];
-$sql = "SELECT id, order_date, order_status FROM orders WHERE id_clients = ?";
+$sql = "SELECT o.id, o.order_date, o.order_status, g.name, o.total_price FROM orders o JOIN goods g ON o.product_id = g.id WHERE o.id_clients = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
@@ -34,8 +32,8 @@ $conn->close();
   <h1>Магазин мебели</h1>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="profile.php">Личный кабинет</a></li>
-          <li class="nav-item"><a class="nav-link" href="create_order.php">Создать заявку</a></li>
+          <li class="nav-item"><a class="nav-link" href="/my_project/php/profile.php">Личный кабинет</a></li>
+          <li class="nav-item"><a class="nav-link" href="/my_project/php/create_order.php">Создать заявку</a></li>
           <li class="nav-item"><a class="nav-link" href="#products">Продукты</a></li>
           <li class="nav-item"><a class="nav-link" href="#about">О Нас</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Контакты</a></li>
@@ -46,18 +44,32 @@ $conn->close();
 <div class="container mt-5">
     <h2>Мои заказы</h2>
 
+    <?php if (isset($_SESSION['success_message'])): ?>
+        <div class="alert alert-success">
+            <?php echo htmlspecialchars($_SESSION['success_message']); ?>
+            <?php unset($_SESSION['success_message']);?>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['error_message'])): ?>
+        <div class="alert alert-danger">
+            <?php echo htmlspecialchars($_SESSION['error_message']); ?>
+            <?php unset($_SESSION['error_message']); ?>
+        </div>
+    <?php endif; ?>
+
     <!-- Таблица заказов -->
     <table class="table table-bordered">
         <thead>
-            <tr><th>ID</th><th>Дата заказа</th><th>Статус</th></tr>
+            <tr><th>ID</th><th>Продукт</th><th>Дата заказа</th><th>Статус</th><th>Итоговая сумма</th></tr>
         </thead>
         <tbody>
             <?php if ($result->num_rows > 0): ?>
                 <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr><td><?php echo $row['id']; ?></td><td><?php echo htmlspecialchars($row['order_date']); ?></td><td><?php echo htmlspecialchars($row['order_status']); ?></td></tr>
+                    <tr><td><?php echo htmlspecialchars($row['id']); ?></td><td><?php echo htmlspecialchars($row['name']); ?></td><td><?php echo htmlspecialchars($row['order_date']); ?></td><td><?php echo htmlspecialchars($row['order_status']); ?></td><td><?php echo htmlspecialchars($row['total_price']); ?> руб.</td></tr>
                 <?php endwhile; ?>
             <?php else: ?>
-                <tr><td colspan='3'>Заказы не найдены.</td></tr>
+                <tr><td colspan='5'>Заказы не найдены.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
