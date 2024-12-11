@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 
     <!-- Ссылка на страницу входа -->
-    <p class="mt-3">Уже есть аккаунт? <a href="/my_project/php/login.php">Войти</a></p>
+    <p class="mt-3">Уже есть аккаунт? <a href="login.php">Войти</a></p>
 
 </div>
 
