@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if ($stmt->execute()) {
         echo "<script>alert('Товар добавлен!');</script>";
-        header("Location: /golovkina.e.p/my_project/html/add_product.html");
+        header("Location: /golovkina.e.p/my_project/php/main_admin.php");
         exit();
     } else {
         echo "Ошибка: " . $stmt->error;
@@ -38,7 +38,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
- 
+ <header>
+        <h1>Администратор - Магазин мебели</h1>
+        <nav>
+            <ul>
+                <li><a href="admin.php">Личный кабинет</a></li>
+                <li><a href="#orders">Заявки</a></li>
+                <li><a href="#products">Продукты</a></li>
+                <li><a href="add_product.php">Добавить товар</a></li>
+                <li><a href="main.php">Главная страница для пользователя</a></li>
+            </ul>
+        </nav>
+    </header>
 <div class="container">
     <h2>Добавить товар</h2>
     <form action="" method="post"> <!-- Изменено на пустую строку для отправки на тот же файл -->
