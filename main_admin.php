@@ -14,9 +14,9 @@
             <ul>
                 <li><a href="admin.php">Личный кабинет</a></li>
                 <li><a href="#orders">Заявки</a></li>
-                <li><a href="#products">Продукты</a></li>
+                <li><a href="manage_orders.php">Статус продуктов</a></li>
                 <li><a href="add_product.php">Добавить товар</a></li>
-                <li><a href="#contact">Контакты</a></li>
+                <li><a href="main.php">Главная страница для пользователя</a></li>         
             </ul>
         </nav>
     </header>
@@ -74,7 +74,8 @@
                                 <td>
                                     <!-- Форма для изменения статуса -->
                                     <form method='post' action='update_order_status.php' style='display:inline;'>
-                                        <input type='hidden' name='order_id' value='{$row['id']}'><select name='new_status' onchange='this.form.submit()'>
+                                        <input type='hidden' name='order_id' value='{$row['id']}'>
+                                        <select name='new_status' onchange='this.form.submit()'>
                                             <option value=''>Изменить статус</option>
                                             <option value='pending'>В ожидании</option>
                                             <option value='completed'>Завершено</option>
