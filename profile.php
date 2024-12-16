@@ -22,7 +22,6 @@ if ($result->num_rows === 1) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   
     $username = $_POST['username'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
@@ -34,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare($updateSql);
         $stmt->bind_param("ssssi", $username, $email, $phone, $hashedPassword, $userId);
     } else {
+        // Если пароль не изменен
         $updateSql = "UPDATE users SET username=?, email=?, phone=? WHERE id=?";
         $stmt = $conn->prepare($updateSql);
         $stmt->bind_param("sssi", $username, $email, $phone, $userId);
@@ -41,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         echo "<script>alert('Данные успешно обновлены!');</script>";
-        
         $_SESSION['username'] = $username;
     } else {
         echo "<script>alert('Ошибка при обновлении данных: " . mysqli_error($conn) . "');</script>";
@@ -64,13 +63,14 @@ $conn->close();
 </head>
 <body>
 <header>
-    <h1> <a href="main.php"> Магазин мебели </a></h1>
+    <h1><a>Магазин мебели</a></h1>
     <nav>
         <ul>
-            <li><a href="/my_project/php/profile.php">Личный кабинет</a></li>
+            <li class="nav-item"><a class="nav-link" href="main.php">На главную</a></li>
             <li><a href="#products">Продукты</a></li>
             <li><a href="#about">О Нас</a></li>
             <li><a href="#contact">Контакты</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.php">Выйти</a></li>
         </ul>
     </nav>
 </header>
@@ -92,7 +92,7 @@ $conn->close();
             <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>">
         </div>
         <div class="form-group mb-3">
-            <label for="password">Пароль</label>
+            <label for="password">Пароль </label>
             <input type="password" class="form-control" id="password" name="password">
         </div>
 
@@ -105,9 +105,10 @@ $conn->close();
 
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 
 </body>
 </html>
+
