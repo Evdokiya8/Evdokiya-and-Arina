@@ -56,6 +56,46 @@ $conn->close();
     <title>Мои заказы</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Стили для формы поиска */
+        .input-group input[type="text"] {
+            border: 1px solid #ccc; /* Цвет границы */
+            border-radius: 4px; /* Закругленные углы */
+            padding: 10px; /* Внутренние отступы */
+            transition: border-color 0.3s; /* Плавный переход цвета границы */
+        }
+
+        .input-group input[type="text"]:focus {
+            border-color: #007bff; /* Цвет границы при фокусе */
+            outline: none; /* Убираем обводку при фокусе */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Легкая тень при фокусе */
+        }
+
+        .input-group select {
+            border: 1px solid #ccc; /* Цвет границы */
+            border-radius: 4px; /* Закругленные углы */
+            padding: 10px; /* Внутренние отступы */
+        }
+
+        .table {
+            margin-top: 20px; /* Отступ сверху для таблицы */
+        }
+
+        .table th, .table td {
+            text-align: center; /* Выравнивание текста по центру */
+            vertical-align: middle; /* Выравнивание по вертикали */
+        }
+
+        .table th {
+            background-color: #007bff; /* Цвет фона заголовков таблицы */
+            color: white; /* Цвет текста заголовков таблицы */
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f2f2f2; /* Цвет фона для нечетных строк таблицы */
+        }
+    </style>
 </head>
 <body>
 
@@ -64,7 +104,7 @@ $conn->close();
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="profile.php">Личный кабинет</a></li>
-          <li class="nav-item"><a class="nav-link" href="create_order.php">Создать заявку</a></li>
+          <li class="nav-item"><a class="nav-link" href="main.php">Создать заявку</a></li>
           <li class="nav-item"><a class="nav-link" href="#products">Продукты</a></li>
           <li class="nav-item"><a class="nav-link" href="#about">О Нас</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Контакты</a></li>
@@ -130,7 +170,7 @@ $conn->close();
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script> 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script> 
 
 </body>
 </html>
