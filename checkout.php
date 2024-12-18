@@ -65,7 +65,50 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Стили для заголовка */
+        h2 {
+            margin-bottom: 20px; /* Отступ снизу для заголовка */
+            font-size: 1.5rem; /* Размер шрифта заголовка */
+        }
+
+        /* Стили для карточки товара */
+        .card {
+            margin-bottom: 20px; /* Отступ снизу карточки товара */
+            border: 1px solid #ddd; /* Цвет границы карточки */
+            border-radius: 8px; /* Закругленные углы карточки */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень */
+        }
+
+        .card-img-top {
+            height: 150px; /* Уменьшенная высота для изображений товаров */
+            object-fit: cover; /* Обеспечение правильного отображения изображения */
+            border-top-left-radius: 8px; /* Закругление верхнего левого угла */
+            border-top-right-radius: 8px; /* Закругление верхнего правого угла */
+        }
+
+        .form-label {
+            font-weight: bold; /* Жирный текст для меток форм */
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Цвет кнопки "Оформить заказ" */
+            border-color: #007bff; /* Цвет границы кнопки "Оформить заказ" */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Цвет кнопки при наведении */
+            border-color: #0056b3; /* Цвет границы кнопки при наведении */
+        }
+
+        .container {
+            padding-bottom: 20px; /* Отступ снизу для контейнера */
+        }
+        
+    </style>
 </head>
 <body>
 
@@ -84,39 +127,43 @@ mysqli_close($conn);
     <?php if ($product): ?>
         <h2><?php echo htmlspecialchars($product['name']); ?></h2>
         <img src="<?php echo htmlspecialchars($product['image_link']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="img-fluid mb-3">
-        <p><?php echo htmlspecialchars($product['description']); ?></p>
-        <p><strong>Цена: <?php echo htmlspecialchars($product['price']); ?> руб.</strong></p>
+        
+        <div class="card p-3 mb-4">
+            <p><?php echo htmlspecialchars($product['description']); ?></p>
+            <p><strong>Цена: <?php echo htmlspecialchars($product['price']); ?> руб.</strong></p>
 
-        <!-- Форма для оформления заказа -->
-        <form method="post" action="">
-            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
-            <div class="mb-3">
-                <label for="quantity" class="form-label">Количество:</label>
-                <input type="number" id="quantity" name="quantity" min="1" value="1" required class="form-control">
-            </div>
+            <!-- Форма для оформления заказа -->
+            <form method="post" action="">
+                <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Количество:</label>
+                    <input type="number" id="quantity" name="quantity" min="1" value="1" required class="form-control">
+                </div>
 
-            <div class="mb-3">
-                <label for="delivery_address" class="form-label">Адрес доставки:</label>
-                <input type="text" id="delivery_address" name="delivery_address" required class="form-control">
-            </div>
+                <div class="mb-3">
+                    <label for="delivery_address" class="form-label">Адрес доставки:</label>
+                    <input type="text" id="delivery_address" name="delivery_address" required class="form-control">
+                </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Электронная почта:</label>
-                <input type="email" id="email" name="email" required class="form-control">
-            </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Электронная почта:</label>
+                    <input type="email" id="email" name="email" required class="form-control">
+                </div>
 
-            <div class="mb-3">
-                <label for="payment_method" class="form-label">Способ оплаты:</label>
-                <select id="payment_method" name="payment_method" required class='form-select'>
-                    <option value="">Выберите способ оплаты</option>
-                    <option value='наличные'>Наличные</option>
-                    <option value='карта'>Карта</option>
-                    <option value='электронные деньги'>Электронные деньги</option>
-                </select>
-            </div>
+                <div class="mb-3">
+                    <label for="payment_method" class="form-label">Способ оплаты:</label>
+                    <select id="payment_method" name="payment_method" required class='form-select'>
+                        <option value="">Выберите способ оплаты</option>
+                        <option value='наличные'>Наличные</option>
+                        <option value='карта'>Карта</option>
+                        <option value='электронные деньги'>Электронные деньги</option>
+                    </select>
+                </div>
 
-            <button type="submit" class="btn btn-primary">Оформить заказ</button>
-        </form>
+                <button type="submit" class="btn btn-primary">Оформить заказ</button>
+            </form>
+
+        </div>
 
     <?php else: ?>
         <p>Товар не найден.</p>
@@ -130,7 +177,7 @@ mysqli_close($conn);
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script> 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script> 
 
 </body>
 </html>
