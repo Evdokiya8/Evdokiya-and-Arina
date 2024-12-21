@@ -135,7 +135,7 @@ $result = $stmt->get_result();
           <li class="nav-item"><a class="nav-link" href="admin.php">Личный кабинет</a></li>
           <li class="nav-item"><a class="nav-link" href="#products">Продукты</a></li>
           <li class="nav-item"><a class="nav-link" href="#contact">Контакты</a></li>
-          <li class="nav-item"><a class="nav-link" href="/my_project/php/logout.php">Выйти</a></li>
+          <li class="nav-item"><a class="nav-link" href="logout.php">Выйти</a></li>
       </ul>
   </nav>
 </header>
