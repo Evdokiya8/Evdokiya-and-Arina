@@ -13,97 +13,62 @@
         <nav>
             <ul>
                 <li><a href="admin.php">Личный кабинет</a></li>
-                <li><a href="#orders">Заявки</a></li>
-                <li><a href="manage_orders.php">Статус продуктов</a></li>
+                <li><a href="manage_orders2.php">Заявки</a></li>
                 <li><a href="add_product.php">Добавить товар</a></li>
-                <li><a href="main.php">Главная страница для пользователя</a></li>         
             </ul>
         </nav>
     </header>
 
     <section class="banner">
-        <h2>Управление заявками и продуктами</h2>
-        <p>Здесь вы можете управлять всеми заявками и товарами в магазине.</p>
-    </section>
-
-    <section id="orders">
-        <h2>Заявки</h2>
-
-        <div class="filter mb-3">
-            <label for="statusFilter">Фильтр по статусу:</label>
-            <select id="statusFilter" class="form-control" onchange="filterOrders()">
-                <option value="">Все статусы</option>
-                <option value="pending">В ожидании</option>
-                <option value="completed">Завершено</option>
-                <option value="canceled">Отменено</option>
-            </select>
-        </div>
-
-        <div class="search-filter mb-3">
-            <input type="text" id="search" placeholder="Поиск по заявкам..." class="form-control">
-        </div>
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Дата заказа</th>
-                    <th>Статус заказа</th>
-                    <th>ID клиента</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody id="orders-table-body">
-                <?php
-                require('database.php');
-
-                $SQL = "SELECT id, order_date, order_status, id_clients FROM orders";
-                $result = mysqli_query($conn, $SQL);
-                
-                if (!$result) {
-                    die("Couldn't execute query: " . mysqli_error($conn));
-                }
-
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                        echo "<tr data-id='{$row['id']}' data-status='{$row['order_status']}'>
-                                <td>{$row['id']}</td>
-                                <td>{$row['order_date']}</td>
-                                <td>{$row['order_status']}</td>
-                                <td>{$row['id_clients']}</td>
-                                <td>
-                                    <!-- Форма для изменения статуса -->
-                                    <form method='post' action='update_order_status.php' style='display:inline;'>
-                                        <input type='hidden' name='order_id' value='{$row['id']}'>
-                                        <select name='new_status' onchange='this.form.submit()'>
-                                            <option value=''>Изменить статус</option>
-                                            <option value='pending'>В ожидании</option>
-                                            <option value='completed'>Завершено</option>
-                                            <option value='canceled'>Отменено</option>
-                                        </select>
-                                    </form>
-
-                                    <!-- Форма для удаления заявки -->
-                                    <form method='post' action='delete_order.php' style='display:inline;'>
-                                        <input type='hidden' name='delete_order_id' value='{$row['id']}'>
-                                        <button type='submit' class='btn btn-danger btn-sm'>Удалить</button>
-                                    </form>
-                                </td>
-                              </tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='5'>Заявки не найдены.</td></tr>";
-                }
-
-                mysqli_close($conn);
-                ?>
-            </tbody>
-        </table>
+        <h2>Управление продуктами</h2>
+        <p>Здесь вы можете управлять всеми товарами в магазине.</p>
     </section>
 
     <!-- Раздел для продуктов -->
     <section id="products">
-        <h2>Продукты</h2>
+        <h2>Все товары</h2>
+        <div class="products-container row">
+            <?php  
+            require('database.php');  
+
+            // Объединение товаров из двух таблиц
+            $SQL = "SELECT id, name, description, price, image_link FROM products 
+                    UNION ALL 
+                    SELECT id, name, description, price, image_link FROM goods"; 
+            $result = mysqli_query($conn, $SQL);  
+            if (!$result) { 
+                die("Couldn't execute query: " . mysqli_error($conn)); 
+            } 
+
+            if (mysqli_num_rows($result) > 0) { 
+                while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) { 
+                    echo "<div class='product col-md-4 mb-4'> 
+                            <div class='card'>
+                                <img src='".htmlspecialchars($row['image_link'])."' alt='".htmlspecialchars($row['name'])."' class='card-img-top'> 
+                                <div class='card-body'>
+                                    <h5 class='card-title'>".htmlspecialchars($row['name'])."</h5> 
+                                    <p class='card-text'>Цена: ".htmlspecialchars($row['price'])." руб.</p> 
+                                    <!-- Кнопка редактирования -->
+                                    <form method='get' action='edit_product.php' style='display:inline;'>
+                                        <input type='hidden' name='product_id' value='".htmlspecialchars($row['id'])."'>
+                                        <button type='submit' class='btn btn-warning'>Редактировать</button>  
+                                    </form>
+                                    <!-- Кнопка удаления -->
+                                    <form method='post' action='delete_product.php' style='display:inline;'>
+                                        <input type='hidden' name='product_id' value='".htmlspecialchars($row['id'])."'>
+                                        <button type='submit' class='btn btn-danger'>Удалить</button>  
+                                    </form>
+                                </div>
+                            </div>
+                          </div>"; 
+                } 
+            } else { 
+                echo "<p>Товары не найдены.</p>"; 
+            } 
+
+            mysqli_close($conn); 
+            ?> 
+        </div>
     </section>
 
     <!-- Подвал -->
@@ -114,35 +79,6 @@
     <!-- Скрипты -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script> 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-    <!-- Скрипт фильтрации -->
-    <script>
-        document.getElementById('search').addEventListener('input', function() {
-            const filter = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#orders-table-body tr');
-            rows.forEach(row => {
-                const clientId = row.cells[3].textContent.toLowerCase();
-                if (clientId.includes(filter)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-
-        function filterOrders() {
-            const statusFilter = document.getElementById('statusFilter').value;
-            const rows = document.querySelectorAll('#orders-table-body tr');
-            rows.forEach(row => {
-                const orderStatus = row.dataset.status;
-                if (statusFilter === '' || orderStatus === statusFilter) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-    </script>
 
 </body>
 </html>
