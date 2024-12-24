@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Обработка добавления товара
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $description = $_POST['description'];
@@ -22,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if ($stmt->execute()) {
         echo "<script>alert('Товар добавлен!');</script>";
-      
-        header("Location: add_product.php"); // Перезагрузка страницы для отображения нового товара
+        // Перезагрузка страницы для отображения нового товара
+        header("Location: add_product.php"); 
         exit();
     } else {
         echo "Ошибка: " . $stmt->error;
@@ -47,9 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <ul>
             <li><a href="admin.php">Личный кабинет</a></li>
             <li><a href="#orders">Заявки</a></li>
-            <li><a href="#products">Продукты</a></li>
-            <li><a href="add_product.php">Добавить товар</a></li>
-            <li><a href="main.php">Главная страница для пользователя</a></li>
+            <li ><a class="nav-link" href="main_admin.php">На главную</a></li>
         </ul>
     </nav>
 </header>
@@ -74,15 +73,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="text" name="image_link" class="form-control" required />
         </div>
         <button type="submit" class="btn btn-primary">Добавить товар</button>
-       <?php if (isset($_SESSION['user_id'])): ?>
-           <a href='logout.php' class='btn btn-danger'>Выйти</a><br><br><?php endif; ?>
-       
+
+        <!-- Кнопка Назад -->
+        <a href="main_admin.php" class='btn btn-secondary'>На главную</a>
+
     </form>
 
-   <h2 class="mt-5">Все товары</h2>
+   <!-- Отображение всех товаров -->
+   <h2 class="mt-5">Добавленные товары</h2>
    <div class="products-container row">
        <?php  
-     
+       // Извлечение всех товаров из базы данных
        $SQL = "SELECT id, description, name, image_link, price FROM products"; 
        $result = mysqli_query($conn, $SQL);  
        if (!$result) { 
