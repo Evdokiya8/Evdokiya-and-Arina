@@ -59,9 +59,69 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет администратора</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <title>Личный кабинет администратора</title>
+
+    <style>
+        body {
+            background-color: #f4f7fa; /* Светлый фон страницы */
+            font-family: 'Arial', sans-serif; /* Шрифт страницы */
+        }
+
+        h2 {
+            margin-bottom: 20px; /* Отступ снизу для заголовка */
+            font-size: 1.8rem; /* Размер шрифта заголовка */
+            color: #333; /* Цвет текста заголовка */
+            text-align: center; /* Центрирование заголовка */
+        }
+
+        .container {
+            max-width: 600px; /* Максимальная ширина контейнера */
+            margin: 30px auto; /* Центрирование контейнера с отступом сверху и снизу */
+            padding: 30px; /* Внутренние отступы контейнера */
+            background-color: white; /* Белый фон для контейнера */
+            border-radius: 10px; /* Закругленные углы контейнера */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Легкая тень для контейнера */
+        }
+
+        .form-group {
+            margin-bottom: 15px; /* Отступ между полями ввода */
+        }
+
+        .form-group label {
+            font-weight: bold; /* Жирный текст для меток */
+            color: #555; /* Цвет меток */
+        }
+
+        .form-control {
+            border-radius: 5px; /* Закругленные углы полей ввода */
+            border: 1px solid #ccc; /* Цвет границы полей ввода */
+            transition: border-color 0.3s; /* Плавный переход цвета границы */
+        }
+
+        .form-control:focus {
+            border-color: #007bff; /* Цвет границы при фокусе */
+            box-shadow: none; /* Убираем обводку при фокусе */
+        }
+
+        .btn-primary {
+            background-color: #737383; /* Цвет кнопки */
+            border-color: #737383; /* Цвет границы кнопки */
+            width: 100%; /* Кнопка на всю ширину */
+            border-radius: 5px; /* Закругленные углы кнопки */
+        }
+
+        .btn-primary:hover {
+            background-color: #9898ab; /* Цвет кнопки при наведении */
+            border-color: #9898ab; /* Цвет границы кнопки при наведении */
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+    </style>
 </head>
 <body>
 
@@ -70,8 +130,6 @@ $conn->close();
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <ul class="navbar-nav">
             <li class="nav-item"><a class="nav-link" href="main_admin.php">На главную</a></li>
-          
-
             <li class="nav-item"><a class="nav-link" href="login.php">Выйти</a></li> <!-- Ссылка на выход -->
         </ul>
     </nav>
@@ -101,17 +159,15 @@ $conn->close();
         <button type="submit" class="btn btn-primary">Сохранить изменения</button>
     </form>
 
-    <!-- Footer -->
-    <footer class='mt-5'>
-        <p>&copy; 2024 Магазин мебели. Все права защищены.</p>
-    </footer>
+  
 
 </div>
-
+<footer class='mt-5'>
+    <p>&copy; 2024 Магазин мебели. Все права защищены.</p>
+</footer>
 <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script> 
 <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js'></script> 
 <script src='https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js'></script>
 
 </body>
 </html>
-
